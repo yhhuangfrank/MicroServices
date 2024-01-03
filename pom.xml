@@ -16,6 +16,7 @@
     <module>customer</module>
     <module>fraud</module>
     <module>eureka-server</module>
+    <module>clients</module>
   </modules>
 
   <properties>
@@ -46,6 +47,7 @@
     </dependencies>
   </dependencyManagement>
 
+<!-- 讓以下所有 dependency 能被所有子 module 所用 -->
   <dependencies>
     <dependency>
       <groupId>org.projectlombok</groupId>
@@ -54,6 +56,10 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-openfeign</artifactId>
     </dependency>
   </dependencies>
 

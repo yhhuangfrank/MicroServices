@@ -36,6 +36,12 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
+        <!-- 引入共同 http client 請求 module -->
+        <dependency>
+            <groupId>com.frank</groupId>
+            <artifactId>clients</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 </project>
