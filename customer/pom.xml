@@ -36,6 +36,11 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
+        <!-- 加入 spring-cloud sleuth 追蹤整個 microservice 的請求 (trace id) 並顯示在 log -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-sleuth</artifactId>
+        </dependency>
         <!-- 引入共同 http client 請求 module -->
         <dependency>
             <groupId>com.frank</groupId>
