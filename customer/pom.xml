@@ -41,6 +41,11 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-sleuth</artifactId>
         </dependency>
+        <!-- 引入 zipkin 做為 sleuth trace 的可視化介面 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-sleuth-zipkin</artifactId>
+        </dependency>
         <!-- 引入共同 http client 請求 module -->
         <dependency>
             <groupId>com.frank</groupId>
