@@ -1,7 +1,7 @@
 services:
   postgres:
-    container_name: frankservice-postgres
     image: postgres:16
+    container_name: frankservices_postgres
     environment:
       POSTGRES_USER: frank
       POSTGRES_PASSWORD: password
@@ -11,12 +11,12 @@ services:
     ports:
       - "5433:5432"
     networks:
-      - postgresNetwork
+      - postgres
     restart: unless-stopped
 
   pgadmin:
-    container_name: frankservice-pgadmin
     image: dpage/pgadmin4
+    container_name: frankservices_pgadmin
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
@@ -26,7 +26,7 @@ services:
     ports:
       - "5051:80"
     networks:
-      - postgresNetwork
+      - postgres
     restart: unless-stopped
 
   zipkin:
@@ -34,15 +34,95 @@ services:
     container_name: zipkin
     ports:
       - "9411:9411"
+    networks:
+      - spring
+
   rabbitmq:
     image: rabbitmq:3.9.11-management-alpine
     container_name: rabbitmq
     ports:
       - "5672:5672"
       - "15672:15672"
+    networks:
+      - spring
+
+  eureka-server:
+    image: yhhuangfrank/eureka-server:latest
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - spring
+    depends_on:
+      - zipkin
+
+  apigw:
+    image: yhhuangfrank/apigw:latest
+    container_name: apigw
+    ports:
+      - "8084:8084"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - spring
+    depends_on:
+      - zipkin
+      - eureka-server
+
+  customer:
+    image: yhhuangfrank/customer:latest
+    container_name: customer
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - spring
+      - postgres
+    depends_on:
+      - zipkin
+      - eureka-server
+      - postgres
+      - rabbitmq
+
+  fraud:
+    image: yhhuangfrank/fraud:latest
+    container_name: fraud
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - spring
+      - postgres
+    depends_on:
+      - zipkin
+      - eureka-server
+      - postgres
+      - rabbitmq
+
+  notification:
+    image: yhhuangfrank/notification:latest
+    container_name: notification
+    ports:
+      - "8083:8083"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - spring
+      - postgres
+    depends_on:
+      - zipkin
+      - eureka-server
+      - postgres
+      - rabbitmq
 
 networks:
-  postgresNetwork:
+  postgres:
+    driver: bridge
+  spring:
     driver: bridge
 
 volumes:
